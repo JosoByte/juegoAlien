@@ -1,4 +1,4 @@
-class Nave{
+export class Nave{
     constructor(div){
         this.div = div;
         this.anchoDiv = parseInt(div.getAttribute("width"));
@@ -24,18 +24,15 @@ class Nave{
     }
 
     moverIzquierda(){
-        if(this.posx <= this.anchoDiv-5){
+        if(this.posx < this.anchoDiv-5-this.ancho){
             this.posx += 5;
-            nave.setAttribute("x",this.posx);
+            this.nave.setAttribute("x",this.posx);
         }
     }
     moverDerecha(){
-        if(this.posx >= 5){
+        if(this.posx > 5){
             this.posx -= 5;
-            nave.setAttribute("x",this.posx);
+            this.nave.setAttribute("x",this.posx);
         }
     }
 }
-
-let juego = document.getElementById("juego");
-var nave = new Nave(juego);
