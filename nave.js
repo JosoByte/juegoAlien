@@ -22,6 +22,19 @@ class Nave{
         this.div.appendChild(nave);
         return nave;
     }
+
+    moverIzquierda(){
+        if(this.posx <= this.anchoDiv-5){
+            this.posx += 5;
+            nave.setAttribute("x",this.posx);
+        }
+    }
+    moverDerecha(){
+        if(this.posx >= 5){
+            this.posx -= 5;
+            nave.setAttribute("x",this.posx);
+        }
+    }
 }
 
 let juego = document.getElementById("juego");
