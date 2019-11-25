@@ -1,13 +1,13 @@
 class Juego{
 	constructor(){
+		this.svg=document.getElementById("juego");
 		this.svgx=document.getElementById("juego").getAttribute('width');
 		this.posAlien = new Array();
 
 		this.posY=0
 		this.posX=0
 
-		this.cuadro=document.createElementNS("http://www.w3.org/2000/svg","svg");
-    	this.cuadro.setAttribute('width',this.svgx);
+    	this.svg.setAttribute('width',this.svgx);
 
 		for (this.i=0;this.i<30;this.i++){
 			this.posAlien[this.i]=new Alien();
@@ -18,7 +18,7 @@ class Juego{
 			this.posX+=50;
 			this.posAlien[this.i].x=this.posX;
 			this.posAlien[this.i].y=this.posY;
-			this.cuadro.appendChild(this.posAlien[this.i].rectangulo);
+			this.svg.appendChild(this.posAlien[this.i].rectangulo);
 			this.posAlien[this.i].cargarPos();
 			}
 		}
