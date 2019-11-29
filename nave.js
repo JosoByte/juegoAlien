@@ -35,4 +35,10 @@ export class Nave{
             this.nave.setAttribute("x",this.posx);
         }
     }
+    getX(){
+        return this.posx;
+    }
+    getY(){
+        return this.posy;
+    }
 }
