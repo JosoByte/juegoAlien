@@ -12,18 +12,6 @@ export class Nave{
     }
 
     dibujarNave(){
-        /*
-        let nave = document.createElement("img");
-        //nave.setAttribute("x",this.posx);
-        //nave.setAttribute("y",this.posy);
-        nave.setAttribute("width",this.ancho);
-        nave.setAttribute("height",this.ancho);
-        nave.setAttribute("src","./images/ship.svg");
-
-        this.div.appendChild(nave);
-        /*
-
-        */
         let nave = document.createElementNS("http://www.w3.org/2000/svg","rect");
         nave.setAttribute("x",this.posx);
         nave.setAttribute("y",this.posy);
@@ -36,12 +24,15 @@ export class Nave{
         this.div.appendChild(nave);
         return nave;
     }
-
     moverIzquierda(){
         if(this.posx < this.anchoDiv-5-this.ancho){
             this.posx += 5;
             this.nave.setAttribute("x",this.posx);
         }
+    }
+
+    getNave(){
+        return this.nave;
     }
     moverDerecha(){
         if(this.posx > 5){

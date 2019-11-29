@@ -7,9 +7,12 @@ export class Bala{
         this.posY = this.posYNave;
         this.posX = this.posXNave + this.anchoNave/2;
         this.bala = this.dibujar();
-        this.mover();
+        //this.mover();
     }
 
+    getBala(){
+        return this.bala;
+    }
     dibujar(){
         let bala = document.createElementNS("http://www.w3.org/2000/svg","circle");
         bala.setAttribute("cx",this.posX);
@@ -19,8 +22,16 @@ export class Bala{
         this.div.appendChild(bala);
         return bala;
     }
-
+    getPosY(){
+        return this.posY;
+    }
+    getPosX(){
+        return this.posX;
+    }
     mover(){
+        this.posY -= 5;
+        this.bala.setAttribute("cy",this.posY);
+        /*
         let intervalo = setInterval(()=>{
             this.posY -= 5;
             if(this.posY < 0){
@@ -31,5 +42,6 @@ export class Bala{
                 this.bala.setAttribute("cy",this.posY);
             }
         })
+        */
     }
 }

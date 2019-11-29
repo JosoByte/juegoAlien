@@ -1,10 +1,13 @@
 import { Nave } from "./nave.js";
 import { Alien } from "./alien.js";
+import { Bala } from "./bala.js";
 
 export class Juego{
 	constructor(div){
+        this.puedeDisparar = true;
         this.bloqueado = false;
         this.svg = div;
+        this.balas = new Array();
         this.nave = new Nave(this.svg);
         this.svgx=parseInt(div.getAttribute('width'));
         this.svgy=parseInt(div.getAttribute('height'));
@@ -33,6 +36,7 @@ export class Juego{
         let derecha = true;
         let posicionX = this.anchoAliens;
         let posicionY = this.altoAliens;
+        let balas = document.getElementsByTagName("circle");
         let intervalo = setInterval(()=>{
             if(posicionY < this.svgy-this.separacion*5){
                 if(!this.bloqueado){
@@ -63,21 +67,8 @@ export class Juego{
             else{
                 this.finalizarJuego();
             }
-        },10);
+        },1000);
     }
-        /*
-			this.posAlien[this.i]=new Alien();
-			if (this.posX==this.svgx-50){
-				this.posX=0;
-				this.posY+=50;
-			}
-			this.posX+=50;
-			this.posAlien[this.i].x=this.posX;
-			this.posAlien[this.i].y=this.posY;
-			this.svg.appendChild(this.posAlien[this.i].rectangulo);
-			this.posAlien[this.i].cargarPos();
-        }
-        */
         finalizarJuego(){
 
         }
@@ -87,8 +78,59 @@ export class Juego{
         moverNaveIzquierda(){
             this.nave.moverIzquierda();
         }
+        comprobarChoque(){
+            this.balas.forEach((bala)=>{
+                let balaPosX = bala.getPosX();
+                let balaPosY = bala.getPosY();
+                this.posAlien.forEach((alien)=>{
+                    let alienPosX = alien.getPosX();
+                    let alienPosY = alien.getPosY();
+                    let anchoAlien = alien.getAncho();
+                    if(balaPosY <= alienPosY && balaPosY >= alienPosY-anchoAlien){
+                        if(balaPosX > alienPosX && balaPosX < alienPosX+anchoAlien){
+                            this.svg.removeChild(bala.getBala());
+                            this.svg.removeChild(alien.getAlien());
+                            this.balas.shift();
+                            //bala.getBala().setAttribute("fill","white");
+                            //alien.getAlien().setAttribute("fill","white");
+                        }
+                    }
+                });
+            });
+        }
         dispararNave(){
-            this.nave.disparar();
+            if(this.puedeDisparar){
+                let bala = new Bala(this.svg,this.nave.getNave());
+                this.balas.push(bala);
+                this.puedeDisparar = false;
+                setTimeout(()=>{
+                    this.puedeDisparar = true;
+                },1000);
+                let intervalo = setInterval(()=>{
+                    this.posicion -= 5;
+                    if(bala.getPosY() < 0){
+                        //this.svg.removeChild(bala.getBala());
+                        //this.balas.shift();
+                        clearInterval(intervalo);
+                    }
+                    else{
+                        bala.mover();
+                        this.comprobarChoque();
+                    }
+                },50);
+            }
+            /*
+            let intervalo = setInterval(()=>{
+                this.posY -= 5;
+                if(this.posY < 0){
+                    this.svg.removeChild(this.bala);
+                    clearInterval(intervalo);
+                }
+                else{
+                    this.bala.getBala().setAttribute("cy",this.posY);
+                }
+            },50)
+            */
         }
     }
     
