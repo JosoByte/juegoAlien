@@ -6,7 +6,8 @@ export class Juego{
         this.bloqueado = false;
         this.svg = div;
         this.nave = new Nave(this.svg);
-		this.svgx=parseInt(div.getAttribute('width'));
+        this.svgx=parseInt(div.getAttribute('width'));
+        this.svgy=parseInt(div.getAttribute('height'));
 		this.posAlien = new Array();
         this.separacion = this.svgx/30;
 		this.posY=this.separacion/2;
@@ -30,32 +31,39 @@ export class Juego{
 
     comenzarMovimiento(){      
         let derecha = true;
-        let posicion = this.anchoAliens;
+        let posicionX = this.anchoAliens;
+        let posicionY = this.altoAliens;
         let intervalo = setInterval(()=>{
-            if(!this.bloqueado){
-                if(derecha && posicion<this.svgx-10){
-                    posicion += 10;
-                    this.posAlien.forEach((alien)=>{
-                        alien.moverDerecha();
-                    });
-                }
-                else if(!derecha && posicion>this.anchoAliens-10){
-                    posicion -= 10;
-                    this.posAlien.forEach((alien)=>{
-                        alien.moverIzquierda();
-                    });
+            if(posicionY < this.svgy-this.separacion*5){
+                if(!this.bloqueado){
+                    if(derecha && posicionX<this.svgx-10){
+                        posicionX += 10;
+                        this.posAlien.forEach((alien)=>{
+                            alien.moverDerecha();
+                        });
+                    }
+                    else if(!derecha && posicionX>this.anchoAliens-10){
+                        posicionX -= 10;
+                        this.posAlien.forEach((alien)=>{
+                            alien.moverIzquierda();
+                        });
+                    }
+                    else{
+                        this.posAlien.forEach((alien)=>{
+                            alien.moverAbajo();                    
+                        });
+                        derecha = !derecha;
+                        posicionY +=20;
+                    }       
                 }
                 else{
-                    this.posAlien.forEach((alien)=>{
-                        alien.moverAbajo();
-                    });
-                    derecha = !derecha;
-                }       
+                    clearInterval(intervalo);
+                }
             }
             else{
-                clearInterval(intervalo);
+                this.finalizarJuego();
             }
-        },100);
+        },10);
     }
         /*
 			this.posAlien[this.i]=new Alien();
@@ -70,7 +78,9 @@ export class Juego{
 			this.posAlien[this.i].cargarPos();
         }
         */
+        finalizarJuego(){
 
+        }
         moverNaveDerecha(){
             this.nave.moverDerecha();
         }
