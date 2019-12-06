@@ -7,8 +7,6 @@ class Juego{
 		this.posY=0
 		this.posX=0
 
-    	this.svg.setAttribute('width',this.svgx);
-
 		for (this.i=0;this.i<30;this.i++){
 			this.posAlien[this.i]=new Alien();
 			if (this.posX==this.svgx-50){

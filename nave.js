@@ -1,5 +1,8 @@
+import {Bala} from "./bala.js";
+
 export class Nave{
     constructor(div){
+        this.puedeDisparar = true;
         this.div = div;
         this.anchoDiv = parseInt(div.getAttribute("width"));
         this.ancho = this.anchoDiv*0.05;
@@ -15,19 +18,21 @@ export class Nave{
         nave.setAttribute("width",this.ancho);
         nave.setAttribute("height",this.ancho);
         nave.setAttribute("fill","black");
-        nave.setAttribute("stroke-width",8);
         nave.setAttribute("stroke","black");
         console.log(this.div);
         console.log(nave);
         this.div.appendChild(nave);
         return nave;
     }
-
     moverIzquierda(){
         if(this.posx < this.anchoDiv-5-this.ancho){
             this.posx += 5;
             this.nave.setAttribute("x",this.posx);
         }
+    }
+
+    getNave(){
+        return this.nave;
     }
     moverDerecha(){
         if(this.posx > 5){
@@ -35,10 +40,14 @@ export class Nave{
             this.nave.setAttribute("x",this.posx);
         }
     }
-    getX(){
-        return this.posx;
-    }
-    getY(){
-        return this.posy;
+
+    disparar(){
+        if(this.puedeDisparar){
+            let bala = new Bala(this.div,this.nave);
+            this.puedeDisparar = false;
+            setTimeout(()=>{
+                this.puedeDisparar = true;
+            },1000);
+        }        
     }
 }

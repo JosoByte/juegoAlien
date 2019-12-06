@@ -65,47 +65,59 @@ export class Juego{
                 }
             }
             else{
-                this.finalizarJuego();
+                this.juegoPerdido();
             }
-        },1000);
+        },50);
     }
-        finalizarJuego(){
-
+        juegoGanado(){
+            document.getElementById("titulo").innerHTML = "Has ganado!";
+        }
+        juegoPerdido(){
+            document.getElementById("titulo").innerHTML = "Has perdido...!";
         }
         moverNaveDerecha(){
-            this.nave.moverDerecha();
+            if(!this.bloqueado)
+                this.nave.moverDerecha();
         }
         moverNaveIzquierda(){
-            this.nave.moverIzquierda();
+            if(!this.bloqueado)
+                this.nave.moverIzquierda();
         }
         comprobarChoque(){
             this.balas.forEach((bala)=>{
+                let anchoBala = parseInt(bala.getBala().getAttribute("r"));
                 let balaPosX = bala.getPosX();
                 let balaPosY = bala.getPosY();
                 this.posAlien.forEach((alien)=>{
                     let alienPosX = alien.getPosX();
                     let alienPosY = alien.getPosY();
                     let anchoAlien = alien.getAncho();
-                    if(balaPosY <= alienPosY && balaPosY >= alienPosY-anchoAlien){
-                        if(balaPosX > alienPosX && balaPosX < alienPosX+anchoAlien){
+                    if((balaPosY <= alienPosY && balaPosY >= alienPosY-anchoAlien) || (balaPosY <= alienPosY && balaPosY >= alienPosY-anchoAlien)){
+                        if((balaPosX+anchoBala > alienPosX && balaPosX+anchoBala < alienPosX+anchoAlien) || (balaPosX-anchoBala > alienPosX && balaPosX-anchoBala < alienPosX+anchoAlien)){
                             this.svg.removeChild(bala.getBala());
                             this.svg.removeChild(alien.getAlien());
-                            this.balas.shift();
-                            //bala.getBala().setAttribute("fill","white");
-                            //alien.getAlien().setAttribute("fill","white");
+                            this.posAlien.splice(this.posAlien.indexOf(alien),1);
+                            if(this.posAlien.length == 0){
+                                this.bloqueado = true;
+                                this.juegoGanado();
+                            }  
+                            this.balas.splice(this.balas.indexOf(bala),1);                
                         }
+                    }
+                    if(balaPosY < 10){
+                        this.balas.splice(this.balas.indexOf(bala),1);
                     }
                 });
             });
         }
         dispararNave(){
-            if(this.puedeDisparar){
+            if(this.puedeDisparar && !this.bloqueado){
                 let bala = new Bala(this.svg,this.nave.getNave());
                 this.balas.push(bala);
                 this.puedeDisparar = false;
                 setTimeout(()=>{
                     this.puedeDisparar = true;
-                },1000);
+                },100);
                 let intervalo = setInterval(()=>{
                     this.posicion -= 5;
                     if(bala.getPosY() < 0){
@@ -117,7 +129,7 @@ export class Juego{
                         bala.mover();
                         this.comprobarChoque();
                     }
-                },50);
+                },20);
             }
             /*
             let intervalo = setInterval(()=>{
